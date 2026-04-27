@@ -14,17 +14,15 @@ There is no test suite or linter configured. Type-checking happens as part of `n
 
 ## Deployment
 
-Production target is **Cloudflare Pages**, project name `trending-communications` on the personal account (`bahy.ali@icloud.com`). Two Cloudflare accounts are visible to wrangler, so deploys must disambiguate:
+Production target is **Cloudflare Pages**, project name `trending-communications`. Deploys go through:
 
 ```bash
-npm run build
-CLOUDFLARE_ACCOUNT_ID=3b37e1aa331ac6561f32e72ec5a19cef \
-  npx wrangler pages deploy dist \
-  --project-name=trending-communications \
-  --branch=main
+npm run deploy
 ```
 
-Without `CLOUDFLARE_ACCOUNT_ID` wrangler will prompt to choose between the personal and the DOX account. The Pages project already exists — do not run `wrangler pages project create` again.
+That script builds, then auto-sources `.env` (if present) before invoking `wrangler pages deploy`. Per-machine config lives in `.env` (gitignored) — see `.env.example`. Set `CLOUDFLARE_ACCOUNT_ID` there if your wrangler session has access to multiple accounts; otherwise wrangler picks the only available one. Do **not** hardcode an account ID in `package.json`, `CLAUDE.md`, `README.md`, or `wrangler.toml` — keep it machine-local.
+
+The Pages project already exists upstream — do not run `wrangler pages project create` again. First-time setup on a new machine: `npx wrangler login`, then `cp .env.example .env` and fill in `CLOUDFLARE_ACCOUNT_ID` if needed.
 
 ## Architecture
 

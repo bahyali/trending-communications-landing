@@ -88,16 +88,22 @@ The page is a single scroll with smooth-scroll navigation between section anchor
 
 Production hosting is **Cloudflare Pages**, project name `trending-communications`.
 
-### Manual deploy (current setup)
+### First-time setup on a new machine
 
 ```bash
-npm run build
-npx wrangler pages deploy dist \
-  --project-name=trending-communications \
-  --branch=main
+npx wrangler login          # opens a browser to authorize wrangler
+cp .env.example .env        # then fill in CLOUDFLARE_ACCOUNT_ID if needed
 ```
 
-Wrangler will use your existing `wrangler login` session. If you have multiple Cloudflare accounts, prefix the command with `CLOUDFLARE_ACCOUNT_ID=<id>` to disambiguate.
+`CLOUDFLARE_ACCOUNT_ID` only needs a value if your wrangler session has access to multiple accounts — otherwise wrangler picks the only available one. `.env` is gitignored, so the value stays per-machine.
+
+### Manual deploy
+
+```bash
+npm run deploy
+```
+
+This builds the production bundle and runs `wrangler pages deploy`, auto-sourcing `.env` so any account/config you've put there is applied. No personal account info is committed to the repo.
 
 ### Auto-deploy on push (optional)
 
